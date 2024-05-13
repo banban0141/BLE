@@ -259,7 +259,6 @@ void process(){
 void loop() {
   readSensor();
   process();
-  setLED(lastSensorState[0], lastSensorState[1], lastSensorState[2]);
 
   //
   //
