@@ -4,9 +4,12 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
+
+
 #define SENSOR0 14
 #define SENSOR1 25
 #define SENSOR2 33
+#define LED_BLINK 2
 #define LED0 18
 #define LED1 19
 #define LED2 21
@@ -18,6 +21,7 @@ BLEServer* pServer = NULL;
 BLECharacteristic* pCharacteristic = NULL;
 
 
+bool led_status = 0;
 bool sensor0[3];
 bool sensor1[3];
 bool sensor2[3];
@@ -46,6 +50,7 @@ unsigned char tx_array[6] = {0xFF, 0xFE, 0xFD, 0xFC, 0xFB, 0xFA};
 uint16_t count = 0;
 uint16_t count1 = 0;
 
+uint32_t time_blink = 0;
 uint32_t ui32_timecho_guitrangthai ;
 uint32_t ui32_timedoccambien;
 
@@ -91,6 +96,7 @@ void setup() {
   pinMode(SENSOR1,INPUT_PULLUP);
   pinMode(SENSOR2,INPUT_PULLUP);
 
+  pinMode(LED_BLINK,OUTPUT);
   pinMode(LED0,OUTPUT);
   pinMode(LED1,OUTPUT);
   pinMode(LED2,OUTPUT);
@@ -134,6 +140,15 @@ void setup() {
   ui32_timedoccambien = millis();
 
    
+}
+/**********************Đèn báo hoạt động**************************/
+
+void denbao(){
+  if (millis() - time_blink >200){
+    time_blink = millis();
+    led_status = !led_status;
+    digitalWrite(LED_BLINK, led_status);
+  }
 }
 /**********************Ham con**************************/
 void ham_con(){
@@ -280,6 +295,6 @@ void loop() {
       // do stuff here on connecting
       oldDeviceConnected = deviceConnected;
   }
-  
+  denbao();
 }
 
